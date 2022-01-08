@@ -2,9 +2,9 @@
   <img src="/assets/logo.jpg" width="700" />
   <p style="margin-top: 25px;">Plugin to allow for the static rendering and exporting of JSX files to disk.</p>
 
-[![Build Status](https://travis-ci.com/drolsen/webpack-js-export.svg?branch=master)](https://travis-ci.com/drolsen/webpack-js-export)
-[![dependencies Status](https://david-dm.org/drolsen/webpack-js-export/status.svg)](https://david-dm.org/drolsen/webpack-js-export)
-[![devDependencies Status](https://david-dm.org/drolsen/webpack-js-export/dev-status.svg)](https://david-dm.org/drolsen/webpack-js-export?type=dev)
+[![Build Status](https://travis-ci.com/drolsen/webpack-jsx-export.svg?branch=master)](https://travis-ci.com/drolsen/webpack-jsx-export)
+[![dependencies Status](https://david-dm.org/drolsen/webpack-jsx-export/status.svg)](https://david-dm.org/drolsen/webpack-jsx-export)
+[![devDependencies Status](https://david-dm.org/drolsen/webpack-jsx-export/dev-status.svg)](https://david-dm.org/drolsen/webpack-jsx-export?type=dev)
 </div>
 
 ### Why?
