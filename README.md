@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/assets/logo.jpg" width="300" />
+  <img src="/assets/logo.jpg" width="700" />
   <p style="margin-top: 25px;">Plugin to allow for the static rendering and exporting of JSX files to disk.</p>
 
 [![Build Status](https://travis-ci.com/drolsen/webpack-js-export.svg?branch=master)](https://travis-ci.com/drolsen/webpack-js-export)
