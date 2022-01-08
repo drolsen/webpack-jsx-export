@@ -2,11 +2,14 @@
   "name": "webpack-jsx-export",
   "keywords": [
     "webpack",
-    "svg",
-    "sprite",
-    "webpack svg",
-    "webpack svg sprite",
-    "webpack svg sprite plugin"
+    "jsx",
+    "export",
+    "static",
+    "render",        
+    "webpack jsx",
+    "webpack jsx export",
+    "webpack jsx static export",
+    "webpack jsx static render export"
   ],
   "version": "1.0.0",
   "description": "Plugin that bundles project SVG files into a SVG sprite",
