@@ -192,7 +192,7 @@ class WebpackJSXExport {
           }
 
           // Requested path + input JSX filename + input JSX file extension
-          output = path.resolve(__dirname, `${output}/${path.basename(i)}`);
+          output = path.resolve(__dirname, `${output}/${path.basename(i).toLowerCase()}`);
         } 
 
         // Output path is FILE (aka we are requesting a custom filename for export)
@@ -207,12 +207,13 @@ class WebpackJSXExport {
 
           // Requested path + input JSX file extension (input JSX file extension used as placeholder)
           output = path.resolve(__dirname, `${output}${path.extname(i)}`);
+          output = output.replace(new RegExp(path.basename(output)), path.basename(output).toLowerCase());
         }
 
         // Pass file information to write (note that output replaces .extension with requested .extension).
         this.write(
           source, 
-          path.basename(output), 
+          path.basename(output).toLowerCase(), 
           index, 
           output.replace(new RegExp(path.extname(output)), extension)
         );

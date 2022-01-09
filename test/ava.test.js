@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
  
 test('basic', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Basic.html'), 'utf8');  
+  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/basic.html'), 'utf8');  
 
   if (pass) {
     t.pass();
@@ -13,7 +13,7 @@ test('basic', t => {
 });
 
 test('Conditions', t => {
-  let pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Conditions.html'), 'utf8');  
+  let pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/conditions.html'), 'utf8');  
 
   if (pass.indexOf('<export>') !== -1 || pass.indexOf('<no-export>') !== -1) {
     pass = false;
@@ -46,8 +46,18 @@ test('custom', t => {
   }
 });
 
+test('custom-extension', t => {
+  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/custom.handlebars'), 'utf8');  
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
+
 test('HTL', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/HTL.html'), 'utf8');  
+  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/htl.html'), 'utf8');  
 
   if (pass.indexOf('data-sly-') === -1) {
     pass = false;
@@ -61,7 +71,7 @@ test('HTL', t => {
 });
 
 test('Razor', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Razor.cshtml'), 'utf8');  
+  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/razor.cshtml'), 'utf8');  
 
   if (pass.indexOf('@model ') === -1) {
     pass = false;
@@ -75,7 +85,7 @@ test('Razor', t => {
 });
 
 test('PHP', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/PHP.php'), 'utf8');  
+  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/php.php'), 'utf8');  
 
   if (pass) {
     t.pass();
@@ -85,8 +95,8 @@ test('PHP', t => {
 });
 
 test('glob', t => {
-  const BasicPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/Basic.html'), 'utf8');  
-  const HTLPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/HTL.html'), 'utf8');  
+  const BasicPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/basic.html'), 'utf8');  
+  const HTLPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/htl.html'), 'utf8');  
 
   if (BasicPass && HTLPass) {
     t.pass();
@@ -98,7 +108,7 @@ test('glob', t => {
 test('filter', t => {
   let pass = false;
 
-  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/Razor.html'))) {
+  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/razor.html'))) {
     pass = true;
   }
 
@@ -112,7 +122,7 @@ test('filter', t => {
 test('extension-filter', t => {
   let pass = false;
 
-  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/Razor.cshtml'))) {
+  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/razor.cshtml'))) {
     pass = true;
   }
 
