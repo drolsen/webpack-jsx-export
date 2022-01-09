@@ -11,7 +11,7 @@
     "webpack jsx static export",
     "webpack jsx static render export"
   ],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Plugin that bundles project SVG files into a SVG sprite",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
