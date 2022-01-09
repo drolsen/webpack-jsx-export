@@ -20,7 +20,7 @@
   "author": "Devin R. Olsen <devin@devinrolsen.com> (http://devinrolsen.com)",
   "license": "MIT",
   "scripts": {
-    "test": "npm run basic-test && npm run node-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run htl-test && npm run razor-test && npm run php-test && npm run glob-test && npm run filter-test && npm run extension-filter-test && npm run ava-test",
+    "test": "npm run basic-test && npm run node-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run htl-test && npm run razor-test && npm run php-test && npm run glob-test && npm run filter-test && npm run extension-filter-test & npm run ava-test",
     "basic-test": "webpack --config ./test/basic.test.config.js --mode production",
     "node-test": "node ./test/node.test.js",
     "custom-test": "webpack --config ./test/custom.test.config.js --mode production",
