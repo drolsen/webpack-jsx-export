@@ -260,7 +260,7 @@ Take note that we have required the `webpack-jsx-export` as `.node` indicating w
 Webpack JSX Export uses babel plugin register approach to transpile JSX source (and syntax sugar) into markup across both Webpack builds, or NodeJS scripts. The baseline babel transpile plugins used by WebpackJSXExport are the following:
 
 Plugin | Description | URL
---- | --- | --- | ---
+--- | --- | --- 
 `babel-plugin-file-loader` | File loader | [Plugin Details](https://www.npmjs.com/package/babel-plugin-file-loader)
 `babel-plugin-css-modules-transform` | Inline Style & Block Style | [Plugin Details](https://www.npmjs.com/package/babel-plugin-css-modules-transform)
 `babel-plugin-transform-require-context` | Require importing | [Plugin Details](https://www.npmjs.com/package/babel-plugin-transform-require-context) 
