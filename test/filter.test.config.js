@@ -1,4 +1,5 @@
 const WebpackJSXExport = require('../index.js');
+const HTL = require('../plugins/HTL.plugin.js');
 const path = require('path');
 
 const config = {
@@ -16,9 +17,17 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/Basic.jsx',
-        output: './dist/exported/'
-      }]
+        input: './test/glob/*.jsx',
+        output: './dist/exported/filter/',
+        filter: (file) => {
+          if (file.name.indexOf('Razor') !== -1) { return false; }
+
+          return file;
+        }
+      }],
+      plugins: {
+        output: [HTL]
+      }
     })
   ];
   return config;

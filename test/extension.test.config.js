@@ -1,4 +1,5 @@
 const WebpackJSXExport = require('../index.js');
+const HTL = require('../plugins/HTL.plugin.js');
 const path = require('path');
 
 const config = {
@@ -17,7 +18,8 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/Basic.jsx',
-        output: './dist/exported/'
+        output: './dist/exported/custom',
+        extension: '.handlebars'
       }]
     })
   ];

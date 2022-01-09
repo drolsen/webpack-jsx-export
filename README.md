@@ -13,6 +13,10 @@ Some larger eco-systems like content management systems don't have the option or
 ### How it works
 Webpack JSX Exports takes all incoming JSX files (of a given plugin configuration), then at the end of a standard Webpack build the exporter will process these configured files and write them to disk.
 
+The process for both gathering is done using a glob methods devoid of webpack file gathering. This ensures that plugin configurations can still export files that might not be part of the overall webpack build.
+
+Further more the exporting method uses a babel register approach to reduce the amount of AST parsing and traversing but also allow for export to work devoid of webpack all together in a node script.
+
 It's that simple!
 
 ---
@@ -56,70 +60,164 @@ module.exports = {
 
 Option | Types | Description | Default
 --- | --- | --- | ---
-`files` | Object Array | Defines both input and output paths of JSX and exported file(s) 
-`plugins` | Array | Defines plugins used during the processing of each JSX file.
-`extension` | String | Defines exported file(s) extension type.
-`comment` | String or Boolean | Defines a custom comment, or no comment at all pre-pended to the top of exported files.
+`files` | Object Array | Defines both input and output paths of JSX and exported file(s) | -- 
+`files.input` | String | Input location of individual or glob .JSX file(s) | -- 
+`files.out` | String | Output location of exported JSX files | -- 
+`files.extension` | String or Function | Defines exported file(s) extension type | .html
+`files.filter` | Function | Filters away imported .JSX files that you wish NOT to be exported | --
+`plugins` | Array | Defines custom plugins used during the processing of each exported JSX file | --
+`comment` | String or Boolean | Defines a custom comment, or no comment at all pre-pended to the top of exported files | --
 
 ## options.files
-With the `files` option, you can specify both `input` and `output` of a single or multiple locations where you would like to glob for JSX files, and ultimatly write these found files to disk.
+With the `files` option, you must specify both `input` and `output` for source JSX files and location where exports will be written:
 
 ```js
 new WebpackJSXExport({
   files: [{
-    input: './src/location/',
-    output: './dist/location'
+    input: './input/location/*.jsx',
+    output: './export/location/'
   }]
 })
 ```
-
-By default the exported file type is `.html`; use `extension` to define a different file extension for your exports:
-```js
-new WebpackJSXExport({
-  files: [{
-    input: './src/location-one/',
-    output: './dist/location',
-    extension: '.html'
-  }]
-})
-```
-Please note the exported filename will be equal to the input filename unless otherwise specified.
-
 
 Multiple locations for input, single export location is the same:
 ```js
 new WebpackJSXExport({
   files: [{
-    input: './src/location-one/',
-    output: './dist/location'
+    input: './input/location-one/*.jsx',
+    output: './export/location/'
   }, {
-    input: './src/location-two/',
-    output: './dist/location'
+    input: './input/location-two/*.jsx',
+    output: './export/location/'
   }]
 })
 ```
 
-## options.plugins
-This option allows you to specify additional plugins to process the exported JSX static rendering. This is useful if your JSX uses server-side syntax like Adobe HTL, .Net razor or PHP that needs to be processed before written to disk. Please note there is currently no large community behind export plugins, so each plugin (if not found in /plugins/) you will need to craft yourself for your project's exporting needs.
+If you only need to target a single JSX file for input you can do so:
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location/specific.jsx',
+    output: './export/location/'
+  }]
+})
+```
 
+By default the exported filename will be equal to the input JSX filename, however if you want to have a custom name for your exported file, you can specify it in the output path:
 
 ```js
 new WebpackJSXExport({
   files: [{
-    input: './src/location-one/',
-    output: './dist/location'
-  }, {
-    input: './src/location-two/',
-    output: './dist/location'
-  }],  
-  plugins: [
-    HTLPlugin(),
-    RazorPlugin(),
-    PHPPlugin()
-  ]
+    input: './input/location/specific.jsx',
+    output: './export/location/custom-name'
+  }]
 })
 ```
----
+
+Please note that there is NO trailing slash or file extension, which tells WebpackJSXExport that this is both a filename (not folder name) and to primes us to default `.html` file extension type on exports.
+
+By default the exported file extension is `.html`; however if you wish to change that, simply use the `extension` option to define a custom one:
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/specific.jsx',
+    output: './export/location/custom-name',
+    extension: '.php'
+  }]
+})
+```
+
+Or, if you want need different extension types across glob input, use the extension option as filtering method:
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name',
+    extension: (file) => {
+      if (file.name === 'Razor.jsx') { file.extension = '.cshtml' }
+
+      return file;
+    }
+  }]
+})
+```
+Please note you must return `file` to send changes off to export process.
+
+Lastly `files` options offers a `filter` method that allows you to filter away .JSX files you wish NOT to be exported under a glob input scenario:
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name',
+    filter: (file) => {
+      if (file.name.indexOf('special-file')) {
+        return false;
+      }
+
+      return file;
+    }
+  }]
+})
+```
+Please note, the returning of a `false` value is what denotes a particular file not to be exported; so a `return file` is a required.
+
+## options.plugins
+There are two plugin types, `input` and `output`. The `input` plugin types are plugins that support the consuming (pre-rendering) of your JSX files, while the `output` are plugins that support exporting (post-rendering) of your JSX files.
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/'
+  }],  
+  plugins: {
+    input: [],
+    output: []
+  }
+})
+```
+
+## options.plugins.input
+The `plugins.input` option allows you to specify additional plugins to support the processing of JSX syntax before being rendered for export. This is useful if your JSX uses a newer syntax that requires a babel plugin(s).
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/',
+    output: './export/location/'
+  }],  
+  plugins: {
+    input: [
+      '@babel/implicit-function'
+    ]
+  }
+})
+```
+
+## options.plugins.output
+This option allows you to specify additional plugins to process the exported JSX static rendering(s). This is useful if your JSX uses server-side syntax like Adobe HTL, .Net razor or PHP that needs to be custom processed before written to disk. 
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/',
+    output: './export/location/'
+  }],  
+  plugins: {
+    output: [
+      HTLPlugin(),
+      RazorPlugin(),
+      PHPPlugin()
+    ]
+  } 
+})
+```
+
+Please note there is currently no large community behind export plugins, so each plugin (if not found in /plugins/) you will need to craft yourself for your project's exporting needs. For more information on plugin crafting and available API see `/plugins/README.md`.
+
 
 ## options.comment
 At the top of each exported file, a comment is included to denote to developers at a later point that this file was auto generated. You can supply your own comment here using the `comment` option.
@@ -137,6 +235,64 @@ new WebpackJSXExport({
   comment: false
 })
 ```
+
+### NodeJS Script Usage
+```js
+const WebpackJSXExport = require('../index.js');
+
+const exporter = new WebpackJSXExport({
+  files: [{
+    input: './input/location/*.jsx',
+    output: './export/location/'
+  }]
+});
+
+exporter.run();
+```
+
+Take note that we have required the `webpack-jsx-export` as `.node` indicating we want a NodeJS version of the plugin. Also note that we now have a `.run()` method to actual perform the exporting. This gives finer control between when instantiating a exporter, its configuration and when the exporting runs.
+
+
+---
+
+### Babel Transpile Plugins
+
+Webpack JSX Export uses babel plugin register approach to transpile JSX source (and syntax sugar) into markup across both Webpack builds, or NodeJS scripts. The baseline babel transpile plugins used by WebpackJSXExport are the following:
+
+Plugin | Description | URL
+--- | --- | --- | ---
+`babel-plugin-file-loader` | File loader | [Plugin Details](https://www.npmjs.com/package/babel-plugin-file-loader)
+`babel-plugin-css-modules-transform` | Inline Style & Block Style | [Plugin Details](https://www.npmjs.com/package/babel-plugin-css-modules-transform)
+`babel-plugin-transform-require-context` | Require importing | [Plugin Details](https://www.npmjs.com/package/babel-plugin-transform-require-context) 
+`@babel/plugin-transform-react-jsx` | JSX Transpile | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
+`@babel/plugin-proposal-object-rest-spread` | Object Spread | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
+`@babel/plugin-proposal-class-properties` | JS Classes | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)
+`@babel/plugin-transform-react-display-name` | React Helper | [Plugin Details](https://www.npmjs.com/package/babel-plugin-add-react-displayname)
+`@babel/plugin-proposal-nullish-coalescing-operator` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator)
+`@babel/plugin-proposal-async-generator-functions` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-async-generator-functions)
+`@babel/plugin-transform-for-of` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-for-of)
+`@babel/plugin-proposal-optional-chaining` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-optional-chaining)
+`@babel/plugin-transform-reserved-words` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-reserved-words)
+
+
+### Babel Alias and Global Namespaces
+Webpack JSX Export while run under a Webpack configuration will automatically carry over any alias pathing you may have configured for you build. You wont need to maintain this yourself in the plugins option.
+
+```js
+require.resolve('babel-plugin-module-resolver'), {  // (see: https://www.npmjs.com/package/babel-plugin-module-resolver)
+  'alias': (compiler) ? compiler.options.resovle : {}
+}
+```
+
+Furthermore two very common global namespaces for `React` and `PropType` have been setup for you, so again you don't need to maintain these in the plugin's options.
+```js
+require.resolve('babel-plugin-import-globals'), {   // (see: https://www.npmjs.com/package/babel-plugin-import-globals)
+  "React": "react",
+  "PropTypes": 'prop-types'
+}
+```
+
+While both of the above come out of the box, take note on how they are being used as you can pass your own versions through the plugin's options if you say, want to add more required global namespaces or context resolver(s).
 
 ---
 
