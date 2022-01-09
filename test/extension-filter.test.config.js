@@ -5,6 +5,10 @@ const path = require('path');
 
 const config = {
   entry: path.resolve(__dirname, 'test.js'),
+  output: {
+    path: path.resolve(__dirname, '../dist'), 
+    filename: '../[name].js'
+  },
   module: { },
   optimization: {
     minimize: false
