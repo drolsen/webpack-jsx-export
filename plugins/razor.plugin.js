@@ -1,6 +1,6 @@
-// PHP JSX export plugin
+// .NET Razor JSX export plugins
 
-const PHP = (options = {}) => {
+const Razor = (options = {}) => {
   options = Object.assign({}, {});
 
   return {
@@ -10,4 +10,4 @@ const PHP = (options = {}) => {
   };
 };
 
-module.exports = PHP;
+module.exports = Razor;

@@ -1,6 +1,6 @@
-// .NET Razor JSX export plugin
+// Adobe Sightly HTL JSX export plugins
 
-const Razor = (options = {}) => {
+const HTL = (options = {}) => {
   options = Object.assign({}, {});
 
   return {
@@ -10,4 +10,4 @@ const Razor = (options = {}) => {
   };
 };
 
-module.exports = Razor;
+module.exports = HTL;

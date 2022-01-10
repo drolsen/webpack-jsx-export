@@ -3,8 +3,8 @@
   The container element also comes with a large number of layout control form Flex to CSS grids.
 */
 
-import Container from '../elements/Container.jsx';
-import Sly from '../elements/Sly.jsx';
+import Container from '../elements/container.jsx';
+import Sly from '../elements/sly.jsx';
 
 export default (
   <Container>

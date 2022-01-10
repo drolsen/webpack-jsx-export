@@ -1,9 +1,9 @@
 const test = require('ava');
 const fs = require('fs');
 const path = require('path');
- 
-test('basic', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Basic.html'), 'utf8');  
+
+test('basic-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/basic.html'));  
 
   if (pass) {
     t.pass();
@@ -12,10 +12,10 @@ test('basic', t => {
   }
 });
 
-test('Conditions', t => {
-  let pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Conditions.html'), 'utf8');  
+test('conditions-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/conditions.html'), 'utf8');  
 
-  if (pass.indexOf('<export>') !== -1 || pass.indexOf('<no-export>') !== -1) {
+  if (pass.toString().indexOf('<export>') !== -1 || pass.toString().indexOf('<no-export>') !== -1) {
     pass = false;
   }
 
@@ -26,8 +26,8 @@ test('Conditions', t => {
   }
 });
 
-test('node', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/node.html'), 'utf8');  
+test('node-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/node.html'));  
 
   if (pass) {
     t.pass();
@@ -36,8 +36,8 @@ test('node', t => {
   }
 });
 
-test('custom', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/custom.html'), 'utf8');  
+test('custom-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/custom.html'));  
 
   if (pass) {
     t.pass();
@@ -46,10 +46,20 @@ test('custom', t => {
   }
 });
 
-test('HTL', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/HTL.html'), 'utf8');  
+test('custom-extension', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/custom.handlebars'));  
 
-  if (pass.indexOf('data-sly-') === -1) {
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
+
+test('htl-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/htl.html'), 'utf8');  
+
+  if (pass.toString().indexOf('data-sly-') === -1) {
     pass = false;
   }
 
@@ -60,12 +70,8 @@ test('HTL', t => {
   }
 });
 
-test('Razor', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/Razor.cshtml'), 'utf8');  
-
-  if (pass.indexOf('@model ') === -1) {
-    pass = false;
-  }
+test('razor-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist//razor.cshtml'));
 
   if (pass) {
     t.pass();
@@ -74,8 +80,8 @@ test('Razor', t => {
   }
 });
 
-test('PHP', t => {
-  const pass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/PHP.php'), 'utf8');  
+test('php-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/php.php'));  
 
   if (pass) {
     t.pass();
@@ -84,9 +90,9 @@ test('PHP', t => {
   }
 });
 
-test('glob', t => {
-  const BasicPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/Basic.html'), 'utf8');  
-  const HTLPass = fs.readFileSync(path.resolve(__dirname, '../dist/exported/glob/HTL.html'), 'utf8');  
+test('glob-test', t => {
+  const BasicPass = fs.existsSync(path.resolve(__dirname, './../dist/glob/basic.html'));  
+  const HTLPass = fs.existsSync(path.resolve(__dirname, './../dist/glob/htl.html'));  
 
   if (BasicPass && HTLPass) {
     t.pass();
@@ -95,10 +101,10 @@ test('glob', t => {
   }
 });
 
-test('filter', t => {
+test('filter-test', t => {
   let pass = false;
 
-  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/Razor.html'))) {
+  if (!fs.existsSync(path.resolve(__dirname, './../dist/filter/razor.html'))) {
     pass = true;
   }
 
@@ -109,10 +115,10 @@ test('filter', t => {
   }
 });
 
-test('extension-filter', t => {
+test('extension-filter-test', t => {
   let pass = false;
 
-  if (!fs.existsSync(path.resolve(__dirname, '../dist/exported/filter/Razor.cshtml'))) {
+  if (!fs.existsSync(path.resolve(__dirname, './../dist/filter/razor.cshtml'))) {
     pass = true;
   }
 
@@ -122,4 +128,3 @@ test('extension-filter', t => {
     t.fail();
   }
 });
-

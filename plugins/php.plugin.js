@@ -1,6 +1,6 @@
-// Adobe Sightly HTL JSX export plugin
+// PHP JSX export plugins
 
-const HTL = (options = {}) => {
+const PHP = (options = {}) => {
   options = Object.assign({}, {});
 
   return {
@@ -10,4 +10,4 @@ const HTL = (options = {}) => {
   };
 };
 
-module.exports = HTL;
+module.exports = PHP;
