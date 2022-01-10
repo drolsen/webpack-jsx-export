@@ -15,7 +15,7 @@
   "description": "Plugin to allow for the static rendering and exporting of JSX files to disk",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
-    "url": "https://github.com/drolsen/webpak-jsx-export/issues"
+    "url": "https://github.com/drolsen/webpack-jsx-export/issues"
   },
   "author": "Devin R. Olsen <devin@devinrolsen.com> (http://devinrolsen.com)",
   "license": "MIT",
