@@ -13,8 +13,8 @@ import {
   Html,
   If,
   Else
-} from './elements/Razor.jsx';
-import Container from './elements/Container.jsx';
+} from './elements/razor.jsx';
+import Container from './elements/container.jsx';
 
 export default (
   <Container>

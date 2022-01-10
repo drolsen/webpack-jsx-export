@@ -1,6 +1,6 @@
 const WebpackJSXExport = require('../index.js');
-const HTL = require('../plugins/HTL.plugin.js');
-const Razor = require('../plugins/Razor.plugin.js');
+const HTL = require('../plugins/htl.plugin.js');
+const Razor = require('../plugins/razor.plugin.js');
 const path = require('path');
 
 const config = {
@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         input: './test/glob/*.jsx',
         output: './dist/exported/extension/',
         extension: (file) => {
-          if (file.name === 'Razor.jsx') { file.extension = '.cshtml' }
+          if (file.name === 'razor.jsx') { file.extension = '.cshtml' }
 
           return file;
         }

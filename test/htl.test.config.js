@@ -1,5 +1,5 @@
 const WebpackJSXExport = require('../index.js');
-const HTL = require('../plugins/HTL.plugin.js');
+const HTL = require('../plugins/htl.plugin.js');
 const path = require('path');
 
 const config = {
@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/HTL.jsx',
+        input: './test/htl.jsx',
         output: './dist/exported/'
       }],
       plugins: {

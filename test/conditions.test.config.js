@@ -1,5 +1,5 @@
 const WebpackJSXExport = require('../index.js');
-const Conditions = require('../plugins/Conditions.plugin.js');
+const Conditions = require('../plugins/conditions.plugin.js');
 const path = require('path');
 
 const config = {
@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/Conditions.jsx',
+        input: './test/conditions.jsx',
         output: './dist/exported/'
       }],
       plugins: {

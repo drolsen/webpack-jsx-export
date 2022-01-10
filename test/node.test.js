@@ -2,7 +2,7 @@ const WebpackJSXExport = require('../index.js');
 
 const exporter = new WebpackJSXExport({
   files: [{
-    input: './test/Basic.jsx',
+    input: './test/basic.jsx',
     output: './dist/exported/node'
   }]
 });
