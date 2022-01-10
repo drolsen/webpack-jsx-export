@@ -7,12 +7,8 @@ const config = {
     path: path.resolve(__dirname, '../dist'), 
     filename: '[name].js'
   },
-  module: { },
   optimization: {
     minimize: false
-  },
-  resolve: {
-    alias: { }
   }
 };
 
