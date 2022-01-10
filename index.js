@@ -216,7 +216,7 @@ class WebpackJSXExport {
           source, 
           path.basename(output).toLowerCase(), 
           index, 
-          output.replace(new RegExp(path.extname(output)), extension)
+          output.replace(new RegExp(`\\${path.extname(output)}`, 'g'), extension)
         );
       }
     });
