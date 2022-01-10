@@ -31,7 +31,7 @@
     "glob-test": "webpack --config ./test/glob/glob.test.config.js --mode production",
     "filter-test": "webpack --config ./test/filtering/filter.test.config.js --mode production",
     "extension-filter-test": "webpack --config ./test/extensions/extension-filter.test.config.js --mode production",
-    "node-test": "node ./test/node.test.js",
+    "node-test": "node ./test/node/node.test.js",
     "ava-test": "ava ./test/ava.test.js"
   },
   "engines": {

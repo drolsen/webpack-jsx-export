@@ -3,7 +3,7 @@
   The container element also comes with a large number of layout control form Flex to CSS grids.
 */
 
-import Container from './elements/container.jsx';
+import Container from '../elements/container.jsx';
 import {
   Using,
   Inherit,
@@ -14,7 +14,7 @@ import {
   Html,
   If,
   Else
-} from './elements/razor.jsx';
+} from '../elements/razor.jsx';
 
 export default (
   <Container>
