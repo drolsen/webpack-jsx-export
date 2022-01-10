@@ -1,19 +1,15 @@
-const WebpackJSXExport = require('../index.js');
-const htl = require('../plugins/htl.plugin.js');
+const WebpackJSXExport = require('../../index.js');
+const conditions = require('../../plugins/conditions.plugin.js');
 const path = require('path');
 
 const config = {
-  entry: path.resolve(__dirname, 'test.js'),
+  entry: path.resolve(__dirname, '../dummy-entry.js'),
   output: {
-    path: path.resolve(__dirname, '../dist'), 
+    path: path.resolve(__dirname, '../../dist'), 
     filename: '[name].js'
-  },  
-  module: { },
+  },
   optimization: {
     minimize: false
-  },
-  resolve: {
-    alias: { }
   }
 };
 
@@ -21,11 +17,11 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/htl.jsx',
+        input: './test/conditions/conditions.jsx',
         output: './dist/'
       }],
       plugins: {
-        output: [htl]
+        output: [conditions]
       }
     })
   ];

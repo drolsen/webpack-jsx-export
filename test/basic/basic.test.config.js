@@ -1,18 +1,14 @@
-const WebpackJSXExport = require('../index.js');
+const WebpackJSXExport = require('../../index.js');
 const path = require('path');
 
 const config = {
-  entry: path.resolve(__dirname, 'test.js'),
+  entry: path.resolve(__dirname, '../dummy-entry.js'),
   output: {
-    path: path.resolve(__dirname, '../dist'), 
+    path: path.resolve(__dirname, '../../dist'), 
     filename: '[name].js'
-  }, 
-  module: { },
+  },
   optimization: {
     minimize: false
-  },
-  resolve: {
-    alias: { }
   }
 };
 
@@ -20,8 +16,8 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/basic.jsx',
-        output: './dist/custom'
+        input: './test/basic/basic.jsx',
+        output: './dist/'
       }]
     })
   ];
