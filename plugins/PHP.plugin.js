@@ -1,4 +1,4 @@
-// PHP JSX export plugin
+// PHP JSX export plugins
 
 const PHP = (options = {}) => {
   options = Object.assign({}, {});

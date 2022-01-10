@@ -1,4 +1,4 @@
-// Adobe Sightly HTL JSX export plugin
+// Adobe Sightly HTL JSX export plugins
 
 const HTL = (options = {}) => {
   options = Object.assign({}, {});

@@ -1,4 +1,4 @@
-// Allows for <export> and <no-export> tags in JSX source.
+// Allows for <export> and <no-export> tags in JSX sources.
 
 const Conditions = (options = {}) => {
   options = Object.assign({}, {});

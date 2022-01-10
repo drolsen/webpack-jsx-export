@@ -1,4 +1,4 @@
-// .NET Razor JSX export plugin
+// .NET Razor JSX export plugins
 
 const Razor = (options = {}) => {
   options = Object.assign({}, {});
