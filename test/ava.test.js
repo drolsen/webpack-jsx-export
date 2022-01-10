@@ -2,6 +2,24 @@ const test = require('ava');
 const fs = require('fs');
 const path = require('path');
  
+fs.readdir(path.resolve(__dirname, '../dist'), (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+  });
+});
+
+fs.readdir(path.resolve(__dirname, '../dist/exported'), (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+  });
+});
+
+fs.readdir(path.resolve(__dirname, '../dist/exported/glob'), (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+  });
+});
+
 test('basic-test', t => {
   const pass = fs.existsSync(path.resolve(__dirname, '../dist/exported/basic.html'));  
 
