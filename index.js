@@ -61,7 +61,7 @@ class WebpackJSXExport {
     } catch (err) { console.error(err); }
 
     // Make pretty and write processed export to disk
-    fs.writeFileSync(
+    fs.writeFile(
       path,
       pretty(
         `
