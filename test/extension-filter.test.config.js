@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/glob/*.jsx',
-        output: './dist/exported/extension/',
+        output: './dist/extension/',
         extension: (file) => {
           if (file.name === 'razor.jsx') { file.extension = '.cshtml' }
 

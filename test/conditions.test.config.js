@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/conditions.jsx',
-        output: './dist/exported/'
+        output: './dist/'
       }],
       plugins: {
         output: [conditions]

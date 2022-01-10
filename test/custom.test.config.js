@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/basic.jsx',
-        output: './dist/exported/custom'
+        output: './dist/custom'
       }]
     })
   ];

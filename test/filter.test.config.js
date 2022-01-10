@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/glob/*.jsx',
-        output: './dist/exported/filter/',
+        output: './dist/filter/',
         filter: (file) => {
           if (file.name.indexOf('razor') !== -1) { return false; }
 

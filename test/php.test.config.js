@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/php.jsx',
-        output: './dist/exported/',
+        output: './dist/',
         extension: '.php'
       }],
       plugins: {

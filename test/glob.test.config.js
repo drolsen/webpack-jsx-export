@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
     new WebpackJSXExport({
       files: [{
         input: './test/glob/*.jsx',
-        output: './dist/exported/glob/'
+        output: './dist/glob/'
       }]
     })
   ];
