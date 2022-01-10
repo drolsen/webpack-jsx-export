@@ -2,9 +2,13 @@
   <img src="/assets/logo.jpg" width="700" />
   <p style="margin-top: 25px;">Plugin to allow for the static rendering and exporting of JSX files to disk.</p>
 
-[![Build Status](https://travis-ci.com/drolsen/webpack-jsx-export.svg?branch=master)](https://travis-ci.com/drolsen/webpack-jsx-export)
-[![dependencies Status](https://david-dm.org/drolsen/webpack-jsx-export/status.svg)](https://david-dm.org/drolsen/webpack-jsx-export)
-[![devDependencies Status](https://david-dm.org/drolsen/webpack-jsx-export/dev-status.svg)](https://david-dm.org/drolsen/webpack-jsx-export?type=dev)
+[![Build Status](https://app.travis-ci.com/drolsen/webpack-jsx-export.svg?branch=master)](https://app.travis-ci.com/drolsen/webpack-jsx-export)
+[![Minimum node.js version](https://badgen.net/npm/node/webpack-jsx-export)](https://npmjs.com/package/webpack-jsx-export)
+[![downloads](https://img.shields.io/npm/dm/webpack-jsx-export.svg?style=flat-square)](http://npm-stat.com/charts.html?package=webpack-jsx-export&from=2022-01-08)
+[![version](https://img.shields.io/npm/v/webpack-jsx-export.svg?style=flat-square)](http://npm.im/webpack-jsx-export)
+[![GitLab release](https://badgen.net/github/releases/drolsen/webpack-jsx-export)](https://github.com/drolsen/webpack-jsx-export/releases)
+[![MIT License](https://img.shields.io/npm/l/webpack-jsx-export.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/drolsen/webpack-jsx-export/graphs/commit-activity)
 </div>
 
 ### Why?
