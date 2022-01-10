@@ -1,5 +1,5 @@
 const WebpackJSXExport = require('../index.js');
-const Conditions = require('../plugins/conditions.plugin.js');
+const conditions = require('../plugins/conditions.plugin.js');
 const path = require('path');
 
 const config = {
@@ -25,7 +25,7 @@ module.exports = (env, argv) => {
         output: './dist/exported/'
       }],
       plugins: {
-        output: [Conditions]
+        output: [conditions]
       }
     })
   ];

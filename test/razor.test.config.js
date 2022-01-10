@@ -1,5 +1,5 @@
 const WebpackJSXExport = require('../index.js');
-const Razor = require('../plugins/razor.plugin.js');
+const razor = require('../plugins/razor.plugin.js');
 const path = require('path');
 
 const config = {
@@ -26,7 +26,7 @@ module.exports = (env, argv) => {
         extension: '.cshtml'
       }],
       plugins: {
-        output: [Razor]
+        output: [razor]
       }
     })
   ];

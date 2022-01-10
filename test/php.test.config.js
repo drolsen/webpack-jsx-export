@@ -1,5 +1,5 @@
 const WebpackJSXExport = require('../index.js');
-const PHP = require('../plugins/php.plugin.js');
+const php = require('../plugins/php.plugin.js');
 const path = require('path');
 
 const config = {
@@ -26,7 +26,7 @@ module.exports = (env, argv) => {
         extension: '.php'
       }],
       plugins: {
-        output: [PHP]
+        output: [php]
       }
     })
   ];

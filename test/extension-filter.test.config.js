@@ -1,6 +1,6 @@
 const WebpackJSXExport = require('../index.js');
-const HTL = require('../plugins/htl.plugin.js');
-const Razor = require('../plugins/razor.plugin.js');
+const htl = require('../plugins/htl.plugin.js');
+const razor = require('../plugins/razor.plugin.js');
 const path = require('path');
 
 const config = {
@@ -31,7 +31,7 @@ module.exports = (env, argv) => {
         }
       }],
       plugins: {
-        output: [HTL, Razor]
+        output: [htl, razor]
       }
     })
   ];
