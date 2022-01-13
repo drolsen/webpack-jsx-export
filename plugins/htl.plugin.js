@@ -4,7 +4,7 @@ const HTL = (options = {}) => {
   options = Object.assign({}, {});
 
   return {
-    Parse (document) {
+    PostParse (document) {
       
     }
   };

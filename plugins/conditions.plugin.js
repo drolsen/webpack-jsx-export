@@ -4,7 +4,7 @@ const Conditions = (options = {}) => {
   options = Object.assign({}, {});
 
   return {
-    Parse (document) {
+    PostParse (document) {
       // Remove any elements flagged to NOT be rendered in production views
       if (document.querySelector('no-export')) {
         const nonExportingFragments = document.querySelectorAll('no-export');

@@ -1,4 +1,3 @@
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackJSXExport = require('../../index.js');
 const path = require('path');
 
@@ -15,14 +14,18 @@ const config = {
 
 module.exports = (env, argv) => {
   config.plugins = [
-    new CleanWebpackPlugin({
-      'cleanOnceBeforeBuildPatterns': [path.resolve('./dist/')]
-    }),
     new WebpackJSXExport({
       files: [{
         input: './test/basic/basic.jsx',
-        output: './dist/'
-      }]
+        output: './dist/comment/comment-filtered.html'
+      }],
+      comment: (file) => {
+        if (file.name.indexOf('basic') !== -1) {
+          file.comment = 'This is a custom comment for basic.jsx';
+        }
+
+        return file;
+      }
     })
   ];
   return config;

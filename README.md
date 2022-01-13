@@ -67,7 +67,8 @@ Option | Types | Description | Default
 `files.filter` | Function | Filters away imported .JSX files that you wish NOT to be exported | --
 `globals` | Object | Defines any global namespaces or libraries required to process your JSX
 `plugins` | Array | Defines custom plugins used during the processing of each exported JSX file | --
-`comment` | String or Boolean | Defines a custom comment, or no comment at all pre-pended to the top of exported files | --
+`comment` | String, Boolean or Function | Defines a custom comment prepended to the top of exported files | --
+
 
 ## options.files
 With the `files` option, you must specify both `input` and `output` for source JSX files and location where exports will be written:
@@ -265,7 +266,7 @@ Please note there is currently no large community behind export plugins, so each
 
 
 ## options.comment
-At the top of each exported file, a comment is included to denote to developers at a later point that this file was auto generated. You can supply your own comment here using the `comment` option.
+At the top of each exported file, a comment is included to denote to developers (at a later point) that these file(s) were auto generated. You can supply your own comment here using the `comment` option.
 
 ```js
 new WebpackJSXExport({
@@ -273,7 +274,25 @@ new WebpackJSXExport({
 })
 ```
 
-Or, if you wish to have no comment (not recommended), simply supply a `false` value:
+or, if you would like to have custom comments based on different files being exported, you can supply a function to the `comment` option:
+
+```js
+new WebpackJSXExport({
+  comment: (file) => {
+    if (file.name.indexOf('something') !== -1) {
+      file.comment = 'Custom comment for "something" files';
+    }
+
+    if (file.name.indexOf('other') !== -1) {
+      file.comment = 'Custom comment for "other" files';
+    }
+
+    return file;
+  }
+})
+```
+
+Lastly, if you wish to have no comment (not recommended), simply supply a `false` value:
 
 ```js
 new WebpackJSXExport({
@@ -307,7 +326,6 @@ Webpack JSX Export uses babel plugin register approach to transpile JSX source (
 Plugin | Description | URL
 --- | --- | --- 
 `babel-plugin-file-loader` | File loader | [Plugin Details](https://www.npmjs.com/package/babel-plugin-file-loader)
-`babel-plugin-css-modules-transform` | Inline Style & Block Style | [Plugin Details](https://www.npmjs.com/package/babel-plugin-css-modules-transform)
 `babel-plugin-transform-require-context` | Require importing | [Plugin Details](https://www.npmjs.com/package/babel-plugin-transform-require-context) 
 `@babel/plugin-transform-react-jsx` | JSX Transpile | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
 `@babel/plugin-proposal-object-rest-spread` | Object Spread | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
