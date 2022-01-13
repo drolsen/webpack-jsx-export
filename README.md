@@ -17,9 +17,9 @@ Some larger eco-systems like content management systems don't have the option or
 ### How it works
 Webpack JSX Exports takes all incoming JSX files (of a given plugin configuration), then at the end of a standard Webpack build the exporter will process these configured files and write them to disk.
 
-The process for both gathering is done using a glob methods devoid of webpack file gathering. This ensures that plugin configurations can still export files that might not be part of the overall webpack build.
+The process for gathering JSX is done using a glob methods devoid of Webpack file gathering. This ensures that plugin configurations can still export files that might not be part of the overall Webpack build.
 
-Further more the exporting method uses a babel register approach to reduce the amount of AST parsing and traversing but also allow for export to work devoid of webpack all together in a node script.
+Furthermore, the exporting method uses a babel register approach to reduce the amount of AST parsing and traversing but also allow for export to work devoid of Webpack all together in a node script.
 
 It's that simple!
 
@@ -41,11 +41,11 @@ const WebpackJSXExport = require('webpack-jsx-export');
 
 Instantiate new `WebpackJSXExport(...)` class within Webpack's plugin configuration array:
 ```js
-module.exports = {
+{
   "plugins": [
     new WebpackJSXExport()
   ]
-};
+}
 ```
 
 ---
@@ -53,13 +53,9 @@ module.exports = {
 ## Options
 
 ```js
-module.exports = {
-  "plugins": [
-    new WebpackJSXExport({
-      ...options...
-    })
-  ]
-};
+new WebpackJSXExport({
+  ...options...
+})
 ```
 
 Option | Types | Description | Default
@@ -119,7 +115,7 @@ new WebpackJSXExport({
 })
 ```
 
-Please note that there is NO trailing slash or file extension, which tells WebpackJSXExport that this is both a filename (not folder name) and to primes us to default `.html` file extension type on exports.
+Please note that there is NO trailing slash or file extension, which tells WebpackJSXExport that this is a filename (not folder name) and to primes us to default `.html` file extension type on exports.
 
 
 ## options.files.extension
