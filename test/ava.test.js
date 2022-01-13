@@ -142,3 +142,51 @@ test('filter-alt-schema-test', t => {
     t.fail();
   }
 });
+
+test('comment-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/comment/custom.html'), 'utf8');
+
+  if (pass.indexOf('<!--/* This is my custom comment! */-->') === -1) {
+    pass = false;
+  } else {
+    pass = true;
+  }
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
+
+test('comment-filter-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/comment/comment-filtered.html'), 'utf8');
+
+  if (pass.indexOf('<!--/* This is a custom comment for basic.jsx */-->') === -1) {
+    pass = false;
+  } else {
+    pass = true;
+  }
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
+
+test('comment-false-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/comment/no-comment.html'), 'utf8');
+
+  if (pass.indexOf('<!--/* ') !== -1) {
+    pass = false;
+  } else {
+    pass = true;
+  }
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
