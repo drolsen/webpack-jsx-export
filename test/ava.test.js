@@ -128,3 +128,17 @@ test('extension-filter-test', t => {
     t.fail();
   }
 });
+
+test('filter-alt-schema-test', t => {
+  let pass = true;
+
+  if (!fs.existsSync(path.resolve(__dirname, './../dist/filter/alt-schema.html'))) {
+    pass = false;
+  }
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});

@@ -16,12 +16,13 @@ module.exports = (env, argv) => {
   config.plugins = [
     new WebpackJSXExport({
       files: [{
-        input: './test/filtering/*.jsx',
+        input: './test/filtering/alt-schema.jsx',
         output: './dist/filter/',
         filter: (file) => {
-          if (file.name.indexOf('alt-schema') !== -1) { return false; }
-          if (file.name.indexOf('razor') !== -1) { return false; }
-
+          let source = file.source.default;
+          if (source.custom.location.source) {
+            file.source.default = [source.custom.location.source];
+          }
           return file;
         }
       }]
