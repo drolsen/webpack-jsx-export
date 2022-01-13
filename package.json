@@ -38,7 +38,7 @@
   "engines": {
     "node": ">=14.17.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "7.16.0",
     "@babel/plugin-proposal-async-generator-functions": "7.16.0",
     "@babel/plugin-proposal-class-properties": "7.16.0",
@@ -52,20 +52,18 @@
     "@babel/preset-env": "7.16.0",
     "@babel/preset-react": "7.16.0",
     "@babel/register": "7.16.0",
+    "ava": "4.0.1",
     "babel-plugin-css-modules-transform": "1.6.2",
     "babel-plugin-file-loader": "2.0.0",
     "babel-plugin-import-globals": "2.0.0",
     "babel-plugin-module-resolver": "4.1.0",
     "babel-plugin-transform-require-context": "0.1.1",
+    "node-html-parser": "5.2.0",
+    "pretty": "2.0.0",
     "prop-types": "15.7.2",
     "react": "16.9.0",
     "react-dom": "16.9.0",
-    "node-html-parser": "5.2.0",
-    "pretty": "2.0.0"
-  },
-  "devDependencies": {
-    "ava": "^4.0.1",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.1"
+    "webpack": "5.65.0",
+    "webpack-cli": "4.9.1"
   }
 }
