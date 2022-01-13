@@ -66,9 +66,10 @@ Option | Types | Description | Default
 --- | --- | --- | ---
 `files` | Object Array | Defines both input and output paths of JSX and exported file(s) | -- 
 `files.input` | String | Input location of individual or glob .JSX file(s) | -- 
-`files.out` | String | Output location of exported JSX files | -- 
+`files.output` | String | Output location of exported JSX files | -- 
 `files.extension` | String or Function | Defines exported file(s) extension type | .html
 `files.filter` | Function | Filters away imported .JSX files that you wish NOT to be exported | --
+`globals` | Object | Defines any global namespaces or libraries required to process your JSX
 `plugins` | Array | Defines custom plugins used during the processing of each exported JSX file | --
 `comment` | String or Boolean | Defines a custom comment, or no comment at all pre-pended to the top of exported files | --
 
@@ -120,6 +121,9 @@ new WebpackJSXExport({
 
 Please note that there is NO trailing slash or file extension, which tells WebpackJSXExport that this is both a filename (not folder name) and to primes us to default `.html` file extension type on exports.
 
+
+## options.files.extension
+
 By default the exported file extension is `.html`; however if you wish to change that, simply use the `extension` option to define a custom one:
 
 ```js
@@ -149,6 +153,27 @@ new WebpackJSXExport({
 ```
 Please note you must return `file` to send changes off to export process.
 
+
+## options.files.globals
+
+Because WebpackJSXExport approaches JSX babel transpile with a register approach, context of global namespaces or libraries is foreign to the export process. The `files.globals` option allows you to define these global parts required to successfully render a standalone version of your JSX file(s).
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name',
+    globals: {
+      'Utilities': path.resolve('../../utilities.jsx'),
+      'Helpers': path.resolve('../../helpers.jsx')
+    }
+  }]
+})
+```
+In the above example, its assumed our input JSX files are using a `Utilities` and `Helpers` global namespace for two libraries in some way. We define these global namespaces here so our export process has context when faced with JSX file that might be using them.
+
+## options.files.filter
+
 Lastly `files` options offers a `filter` method that allows you to filter away .JSX files you wish NOT to be exported under a glob input scenario:
 
 ```js
@@ -167,6 +192,26 @@ new WebpackJSXExport({
 })
 ```
 Please note, the returning of a `false` value is what denotes a particular file not to be exported; so a `return file` is a required.
+
+---
+
+The `filter` option is also a way to re-define a file's source location before being shipped off to the export process. For instance, if the JSX file(s) in question have a schema up which defines the JSX somewhere other than root, we can re-target our `file.source` to that location:
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name',
+    filter: (file) => {
+      if (file.source.default.schema) {
+        file.source.default = file.source.default.schema.special.place.source;
+      }
+
+      return file;
+    }
+  }]
+})
+```
 
 ## options.plugins
 There are two plugin types, `input` and `output`. The `input` plugin types are plugins that support the consuming (pre-rendering) of your JSX files, while the `output` are plugins that support exporting (post-rendering) of your JSX files.
