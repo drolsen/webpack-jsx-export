@@ -190,3 +190,19 @@ test('comment-false-test', t => {
     t.fail();
   }
 });
+
+test('warnings-test', t => {
+  let pass = fs.readFileSync(path.resolve(__dirname, './../dist/warnings/warning.log'), 'utf8');
+
+  if (pass.indexOf('Warning:') === -1) {
+    pass = true;
+  } else {
+    pass = false;
+  }
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
