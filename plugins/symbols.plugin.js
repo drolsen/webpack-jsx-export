@@ -1,6 +1,6 @@
-// Adobe Sightly HTL JSX export plugins
+// Simple plugin to fix quotes
 
-const HTL = (options = {}) => {
+const Quotes = (options = {}) => {
   options = Object.assign({}, {});
 
   const clean = (markup, rules) => {
@@ -14,9 +14,15 @@ const HTL = (options = {}) => {
 
   return {
     PostParse (document) {
-      document = clean(document.toString(), { 'data-sly-unwrap=""': 'data-sly-unwrap' });
+      document = clean(
+        document.toString(),
+        {
+          '&amp;': '&',
+          '&gt;': '>'
+        }      
+      );
     }
   };
 };
 
-module.exports = HTL;
+module.exports = Quotes;

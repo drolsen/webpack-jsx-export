@@ -6,6 +6,9 @@ const ReactDOM = require('react-dom/server');
 const pretty = require('pretty');
 const merge = require('merge-deep');
 
+const QuotesPlugin = require('./plugins/symbols.plugin.js');
+const SymbolsPlugin = require('./plugins/symbols.plugin.js');
+
 class WebpackJSXExport {
   constructor(options) {
     this.defaultFilter = (file) => { return file; }
@@ -20,24 +23,26 @@ class WebpackJSXExport {
       return file; 
     };
 
-    this.options = merge(options, {
+    this.options = merge({
       files: [],
       plugins: {
         input: [],
-        output: [],
+        output: [
+          QuotesPlugin,
+          SymbolsPlugin
+        ],
       },
-      globals:{}
-    });
-  }
+      globals:{},
+      warnings: true
+    }, options);
 
-  // Helper method used to clean up markup results
-  clean(markup, rules) {
-    Object.keys(rules).map((i) => {
-      markup = markup.replace(new RegExp(i, 'g'), rules[i]);
-      return false;
-    });
+    this.originalError = console.error.bind(console.error);
 
-    return markup;
+    if (this.options.warnings === false) {
+      console.error = (msg) => {
+        if (msg.toString().indexOf('Warning: React') !== -1) { return false; }
+      };      
+    }   
   }
 
   // Helper method that is used procure JSX into Markup and write to disk
@@ -55,20 +60,7 @@ class WebpackJSXExport {
       });     
     } catch (err) { console.error(err); }
 
-    let DOM = parse(
-      this.clean(
-        ReactDOM.renderToStaticMarkup(fileInfo.source.default), 
-        {
-          'data-sly-unwrap=""': 'data-sly-unwrap',
-          '&quot;': '"',
-          '&#34;': '"',
-          '&#x27;': '\'',
-          '&amp;': '&',
-          '&#39;': '\'',
-          '&gt;': '>'
-        }
-      )
-    );
+    let DOM = parse(ReactDOM.renderToStaticMarkup(fileInfo.source.default));
 
     // Process plugin PostParse hooks
     try {
@@ -103,6 +95,8 @@ class WebpackJSXExport {
         }
       }
     );
+
+    console.error = this.originalError;
   }
 
   // Helper method to register babel plugins for JSX collecting
