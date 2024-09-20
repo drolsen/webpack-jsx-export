@@ -11,7 +11,7 @@
     "webpack jsx static export",
     "webpack jsx static render export"
   ],
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Plugin to allow for the static rendering and exporting of JSX files to disk",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
@@ -27,7 +27,7 @@
     "extension-test": "webpack --config ./test/extensions/extension.test.config.js --mode production",
     "conditions-test": "webpack --config ./test/conditions/conditions.test.config.js --mode production",
     "plugin-test": "webpack --config ./test/plugins/htl.test.config.js --mode production && webpack --config ./test/plugins/razor.test.config.js --mode production && webpack --config ./test/plugins/php.test.config.js --mode production",
-    "filter-test": "webpack --config ./test/filtering/filter.test.config.js --mode production && webpack --config ./test/filtering/filter-alt-schema.test.config.js --mode production && webpack --config ./test/extensions/extension-filter.test.config.js --mode production",
+    "filter-test": "webpack --config ./test/filtering/filter.test.config.js --mode production && webpack --config ./test/filtering/filter-alt-schema.test.config.js --mode production && webpack --config ./test/extensions/extension-filter.test.config.js --mode production && webpack --config ./test/filtering/filter-template.test.config.js --mode production",
     "glob-test": "webpack --config ./test/glob/glob.test.config.js --mode production",
     "node-test": "node ./test/node/node.test.js",
     "warning-test": "webpack --config ./test/warnings/warning.test.config.js --mode production",

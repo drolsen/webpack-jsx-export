@@ -72,7 +72,7 @@ Option | Types | Description | Default
 
 
 ## options.files
-With the `files` option, you must specify both `input` and `output` for source JSX files and location where exports will be written:
+With the `files` option, you must specify both `input` and `output` for source JSX files and location of where exports will be written:
 
 ```js
 new WebpackJSXExport({
@@ -83,7 +83,7 @@ new WebpackJSXExport({
 })
 ```
 
-Multiple locations for input, single export location is the same:
+Multiple locations for input, single export location:
 ```js
 new WebpackJSXExport({
   files: [{
@@ -112,12 +112,10 @@ By default the exported filename will be equal to the input JSX filename, howeve
 new WebpackJSXExport({
   files: [{
     input: './input/location/specific.jsx',
-    output: './export/location/custom-name'
+    output: './export/location/custom-name.html'
   }]
 })
 ```
-
-Please note that there is NO trailing slash or file extension, which tells WebpackJSXExport that this is a filename (not folder name) and to primes us to default `.html` file extension type on exports.
 
 
 ## options.files.extension
@@ -134,7 +132,7 @@ new WebpackJSXExport({
 })
 ```
 
-Or, if you want need different extension types across glob input, use the extension option as filtering method:
+Or, if you want need different extension types across a glob input, use the extension option as a filtering method:
 
 ```js
 new WebpackJSXExport({
@@ -170,7 +168,7 @@ new WebpackJSXExport({
   }]
 })
 ```
-Please note, the returning of a `false` value is what denotes a particular file not to be exported; so a `return file` is a required.
+Please note, the returning of a `false` denotes a particular file not to be exported; so a `return file` is required.
 
 ---
 
@@ -192,6 +190,110 @@ new WebpackJSXExport({
 })
 ```
 
+## options.template
+
+The `template` option merges processed files with HTML templates to be part of a larger export. This is useful if you want to create full documents out of a glob of JSX exports.
+
+Note: While templates are defined in .html files, the configred `files.extension` or `files.output` path's used extension still persists as the file extension to be expected on exported files.
+
+
+```js
+new WebpackJSXExport({
+  template: '/path/to/template.html',
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/',
+  }]
+})
+```
+
+#### Example template.html file
+```html
+[comment]
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+  <head>
+    <title>[name]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    [source]
+  </body>
+</html>
+
+```
+
+The template's can use the following outof the box placeholders to replaced with data during export:
+
+Placeholder | Description
+--- | --- 
+`[name]` | Input JSX file's name 
+`[source]` | Input JSX file's rendered source 
+`[comment]` | Configured comment for given export
+
+However you can also create/pass custom data placeholders to be processed as well:
+#### Template example with custom placeholders
+
+```js
+new WebpackJSXExport({
+  template: {
+    file: '/path/to/template.html',
+    placeholders: (holder) => {
+      holder.slogan = 'Super cool page title slogan';
+      holder.styles = `page-${file.name}`;
+      holder.thing = 'Hello world! I am a THING!';    
+    }    
+  }
+})
+```
+
+```html
+[comment]
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+  <head>
+    <title>[name] - [slogan]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body class="[styles]">
+    [source]
+
+    <p>
+      [thing]
+    </p>
+  </body>
+</html>
+
+```
+
+Lastly, you can (like filters) use the `template.files` option as a function to utilize multiple templates based on one or another exporting JSX file:
+
+```js
+new WebpackJSXExport({
+  template: {
+    file: (file, template) => {
+      if (file.name.indexOf('group-one') !== -1) {
+        return '/path/to/group-one-template.html';
+      }
+
+      if (file.name.indexOf('group-two') !== -1) {
+        return '/path/to/group-two-template.html';
+      }
+
+      return '/path/to/basic-template.html';
+    },
+    placeholders: (holder) => {
+      holder.slogan = 'Super cool page title slogan';
+      holder.styles = `page-${file.name}`;
+      holder.thing = 'Hello world! I am a THING!';    
+    }    
+  }
+})
+```
+Please note, when using `template.file` as a function a template path must be returned. If no template path is returned this process is skipped and the configured input JSX file(s) will be exported devoid of any templating.
+
 ## options.plugins
 There are two plugin types, `input` and `output`. The `input` plugin types are plugins that support the consuming (pre-rendering) of your JSX files, while the `output` are plugins that support exporting (post-rendering) of your JSX files.
 
@@ -207,26 +309,6 @@ new WebpackJSXExport({
   }
 })
 ```
-
-## options.globals
-
-Because WebpackJSXExport approaches JSX babel transpile with a plugin register approach, context of global namespaces or libraries is foreign to the export process. The `files.globals` option allows you to define these global parts required to successfully render a standalone version of your JSX file(s).
-
-```js
-new WebpackJSXExport({
-  files: [{
-    input: './input/location-one/*.jsx',
-    output: './export/location/custom-name'
-  }],
-  globals: {
-    'Utilities': path.resolve('../../utilities.jsx'),
-    'Helpers': path.resolve('../../helpers.jsx')
-  }  
-})
-```
-
-In the above example, its assumed our input JSX files are using a `Utilities` and `Helpers` global namespace for two libraries in some way. We define these global namespaces here so our export process has context when faced with JSX file that might be using them.
-
 
 ## options.plugins.input
 The `plugins.input` option allows you to specify additional plugins to support the processing of JSX syntax before being rendered for export. This is useful if your JSX uses a newer syntax that requires a babel plugin(s).
@@ -264,11 +346,34 @@ new WebpackJSXExport({
 })
 ```
 
-Please note there is currently no large community behind export plugins, so each plugin (if not found in /plugins/) you will need to craft yourself for your project's exporting needs. For more information on plugin crafting and available API see `/plugins/README.md`.
+Please note there is currently no large community behind export plugins, so each plugin (if not found in `/plugins/`) you will need to be crafted yourself for your project's exporting needs. 
+
+For more information on plugin crafting and available API see `/plugins/README.md`.
+
+## options.globals
+
+Because WebpackJSXExport approaches JSX babel transpile with a plugin register approach, context of global namespaces or libraries is foreign to the export process. The `files.globals` option allows you to define these global parts required to successfully render a standalone version of your JSX file(s).
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name'
+  }],
+  globals: {
+    'Utilities': path.resolve('../../utilities.jsx'),
+    'Helpers': path.resolve('../../helpers.jsx')
+  }  
+})
+```
+
+In the above example, its assumed our input JSX file(s) are using a `Utilities` and `Helpers` global namespace for two JS libraries in some way defined elsewhere. We define these global namespaces here so our export process has context when faced with JSX file that might be using them.
 
 
 ## options.comment
-At the top of each exported file, a comment is included to denote to developers (at a later point) that these file(s) were auto generated. You can supply your own comment here using the `comment` option.
+At the top of each exported file, a comment is included to denote to developers (at a later point) that these file(s) were auto generated. 
+
+You can supply your own comment here using the `comment` option.
 
 ```js
 new WebpackJSXExport({
@@ -303,19 +408,25 @@ new WebpackJSXExport({
 ```
 
 ## options.warnings
-If you for some reason would like to obscure any JSX warnings you noramlly see in browser console from the terminal during exporting, set the `warnings` option to `false`. 
+If you for some reason would like to obscure any JSX warnings you noramlly see in browser console, from the terminal during exporting; set the `warnings` option to `false`. 
 
 ```js
 new WebpackJSXExport({
-  comment: 'Please do not edit this file! This was generated at build!'
+  warnings: false
 })
 ```
-By default the `warnings` option is `true` with the idea being its better hoist need to fix issue up higher and sooner for developers to see and resolve rather than out in production in browser console.
+
+By default the `warnings` option is `true` with the idea being its better hoist "need to fix issue" up higher and sooner for developers to see, rather than out in production in browser console.
 
 
 ### NodeJS Script Usage
+
+While its recommended that you use WebpackJSXExport in a actual webpack build configuration, it can also be ran from a node script due to how babel plugins are registered prior to rendering.
+
+Here is a basic node script that uses WebpackJSXExport:
+
 ```js
-const WebpackJSXExport = require('../index.js');
+const WebpackJSXExport = require('webpack-jsx-export');
 
 const exporter = new WebpackJSXExport({
   files: [{
@@ -327,7 +438,7 @@ const exporter = new WebpackJSXExport({
 exporter.run();
 ```
 
-Take note that we have required the `webpack-jsx-export` as `.node` indicating we want a NodeJS version of the plugin. Also note that we now have a `.run()` method to actual perform the exporting. This gives finer control between when instantiating a exporter, its configuration and when the exporting runs.
+Note we have a `.run()` method to actual perform the exporting. This gives finer control between when instantiating a exporter, its configuration and when the exporting runs.
 
 
 ---
@@ -371,6 +482,25 @@ require.resolve('babel-plugin-import-globals'), {   // (see: https://www.npmjs.c
 While both of the above come out of the box, take note on how they are being used as you can pass your own versions through the plugin's options if you say, want to add more required global namespaces or context resolver(s).
 
 ---
+
+### &lt;export&gt; & &lt;no-export&gt; tag support
+
+Webpack JSX Export plugin also comes with two built-in tags for giving you finer control over corner cases where a particular part of code should be there in say a Webpack Dev instance, but not there during final production export.
+
+
+```jsx
+<export>
+    Anything in me will be written unwrapped from the &lt;export&gt; tag and written to disk.
+</export>
+
+<no-export>
+    Anything in me is removed from the export and will not be written to disk.
+</no-export>
+```
+
+---
+
+
 
 ### Tests
 

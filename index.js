@@ -12,7 +12,6 @@ const SymbolsPlugin = require('./plugins/symbols.plugin.js');
 class WebpackJSXExport {
   constructor(options) {
     this.defaultFilter = (file) => { return file; }
-    
     this.defaultExtension = (file) => {
       file.extension = '.html';
       return file;
@@ -32,7 +31,8 @@ class WebpackJSXExport {
           SymbolsPlugin
         ],
       },
-      globals:{},
+      globals: {},
+      templates: (file) => { return file; },
       warnings: true
     }, options);
 
@@ -43,60 +43,6 @@ class WebpackJSXExport {
         if (msg.toString().indexOf('Warning: React') !== -1) { return false; }
       };      
     }   
-  }
-
-  // Helper method that is used procure JSX into Markup and write to disk
-  write(fileInfo) {
-    // Process plugin PreParse hooks
-    try {
-      Object.keys(this.options.plugins.output).map((i) => {
-        const plugin = this.options.plugins.output[i]().PreParse;
-
-        if (plugin) {
-          if (plugin(fileInfo)) {
-            fileInfo = plugin(fileInfo);
-          }
-        }
-      });     
-    } catch (err) { console.error(err); }
-
-    let DOM = parse(ReactDOM.renderToStaticMarkup(fileInfo.source.default));
-
-    // Process plugin PostParse hooks
-    try {
-      Object.keys(this.options.plugins.output).map((i) => {
-        const plugin = this.options.plugins.output[i]().PostParse;
-
-        if (plugin) {
-          if (plugin(DOM)) {
-            DOM = plugin(DOM);
-          }
-        }
-      });      
-    } catch (err) { console.error(err); }
-
-    // Make pretty and write processed export to disk
-    fs.writeFile(
-      fileInfo.path,
-      pretty(
-        `
-          ${
-            (fileInfo.comment) 
-              ? `<!--/* ${ fileInfo.comment } */-->` 
-              : ''
-          }
-          ${DOM.toString()}
-        `
-      ),
-      (e) => {
-        if (e) {
-          console.error(e);
-          return false;
-        }
-      }
-    );
-
-    console.error = this.originalError;
   }
 
   // Helper method to register babel plugins for JSX collecting
@@ -255,6 +201,80 @@ class WebpackJSXExport {
         });
       }
     });
+  }
+
+  // Helper method that is used procure JSX into Markup and write to disk
+  write(fileInfo) {
+    // Process plugin PreParse hooks
+    try {
+      Object.keys(this.options.plugins.output).map((i) => {
+        const plugin = this.options.plugins.output[i]().PreParse;
+
+        if (plugin) {
+          if (plugin(fileInfo)) {
+            fileInfo = plugin(fileInfo);
+          }
+        }
+      });     
+    } catch (err) { console.error(err); }
+
+    let DOM = parse(ReactDOM.renderToStaticMarkup(fileInfo.source.default));
+
+    // Remove any elements flagged to NOT be rendered in production views
+    if (DOM.querySelector('no-export')) {
+      const nonExportingFragments = DOM.querySelectorAll('no-export');
+      let nodeLength = nonExportingFragments.length;
+      while (nodeLength--) {
+        Object.defineProperty(nonExportingFragments[nodeLength], 'tagName', { value: '' });
+        Object.defineProperty(nonExportingFragments[nodeLength], 'rawTagName', { value: '' });
+        Object.defineProperty(nonExportingFragments[nodeLength], 'childNodes', { value: [] });
+      }
+    }
+
+    if (DOM.querySelector('export')) {
+      const exportingFragments = DOM.querySelectorAll('export');
+      let nodeLength = exportingFragments.length;
+      while (nodeLength--) {
+        Object.defineProperty(exportingFragments[nodeLength], 'tagName', { value: '' });
+        Object.defineProperty(exportingFragments[nodeLength], 'rawTagName', { value: '' });
+      }
+    }
+
+    // Process plugin PostParse hooks
+    try {
+      Object.keys(this.options.plugins.output).map((i) => {
+        const plugin = this.options.plugins.output[i]().PostParse;
+
+        if (plugin) {
+          if (plugin(DOM)) {
+            DOM = plugin(DOM);
+          }
+        }
+      });      
+    } catch (err) { console.error(err); }
+
+    // Make pretty and write processed export to disk
+    fs.writeFile(
+      fileInfo.path,
+      pretty(
+        `
+          ${
+            (fileInfo.comment) 
+              ? `<!--/* ${ fileInfo.comment } */-->` 
+              : ''
+          }
+          ${DOM.toString()}
+        `
+      ),
+      (e) => {
+        if (e) {
+          console.error(e);
+          return false;
+        }
+      }
+    );
+
+    console.error = this.originalError;
   }
 
   apply(compiler) {
