@@ -7,7 +7,6 @@ import Container from '../elements/container.jsx';
 
 export default (
   <Container>
-    <Container>Hello world!</Container>
     <export>
       <Container>I will be unwrapped and exported</Container>
     </export>

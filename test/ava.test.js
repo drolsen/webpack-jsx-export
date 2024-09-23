@@ -15,7 +15,11 @@ test('basic-test', t => {
 test('conditions-test', t => {
   let pass = fs.readFileSync(path.resolve(__dirname, './../dist/conditions.html'), 'utf8');  
 
-  if (pass.toString().indexOf('<export>') !== -1 || pass.toString().indexOf('<no-export>') !== -1) {
+  if (
+    pass.toString().indexOf('<export>') !== -1 
+    || pass.toString().indexOf('<no-export>') !== -1 
+    || pass.toString().indexOf('I should not be exported') !== -1
+  ) {
     pass = false;
   }
 
