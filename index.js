@@ -107,6 +107,7 @@ class WebpackJSXExport {
       let extension = (typeof files[i].extension !== 'undefined') ? files[i].extension : this.defaultExtension;
       const { input } = files[i];
       const filter = (files[i].filter) ? files[i].filter : this.defaultFilter;
+
       const comment = (typeof this.options.comment !== 'undefined') 
         ? this.options.comment 
         : this.defaultComment;
@@ -137,11 +138,22 @@ class WebpackJSXExport {
             }
 
             // Ensure extension passed in file.input is used instead of options.extension
-            if (path.extname(fileInfo.output) === fileInfo.extension) {
-              fileInfo.output = fileInfo.output.replace(
-                new RegExp(`\\${fileInfo.extension}`),
-                ''
-              );
+            if (!Array.isArray(fileInfo.output)) {
+              if (path.extname(fileInfo.output) === fileInfo.extension) {
+                fileInfo.output = fileInfo.output.replace(
+                  new RegExp(`\\${fileInfo.extension}`),
+                  ''
+                );
+              }
+            } else {
+              Object.keys(fileInfo.output).map((j) => {
+                if (path.extname(fileInfo.output[j]) === fileInfo.extension) {
+                  fileInfo.output[j] = fileInfo.output[j].replace(
+                    new RegExp(`\\${fileInfo.extension}`),
+                    ''
+                  );
+                }
+              });
             }
 
             // Finally we collect file information
@@ -162,42 +174,100 @@ class WebpackJSXExport {
       let { output } = collection[i];
       const { comment } = collection[i];
       const { extension } = collection[i];
-      const isFolder = !path.extname(output) && output.charAt(output.length-1) === '/';
-      // If the file has source only
-      if (source) {
-        // Output path is FOLDER (aka we want to reuse input filename for export)
-        if (isFolder) {
-          // If folder does not exist lets make it
-          if (!fs.existsSync(path.resolve(__dirname, `${output}`))) {
-            fs.mkdirSync(path.resolve(__dirname, `${output}`),  { recursive: true });
+
+      if (!Array.isArray(output)) {
+        const isFolder = !path.extname(output) && output.charAt(output.length-1) === '/';
+        // If the file has source only
+        if (source) {
+          // Output path is FOLDER (aka we want to reuse input filename for export)
+          if (isFolder) {
+            // If folder does not exist lets make it
+            if (!fs.existsSync(path.resolve(__dirname, `${output}`))) {
+              fs.mkdirSync(path.resolve(__dirname, `${output}`),  { recursive: true });
+            }
+
+            // Requested path + input JSX filename + input JSX file extension
+            output = path.resolve(__dirname, `${output}/${path.basename(i).toLowerCase()}`);
           }
 
-          // Requested path + input JSX filename + input JSX file extension
-          output = path.resolve(__dirname, `${output}/${path.basename(i).toLowerCase()}`);
-        } 
+          // Output path is FILE (aka we are requesting a custom filename for export)
+          if (!isFolder){
+            // Getting parent folder of output file path
+            const _output = path.resolve(
+              __dirname,
+              `${output.replace(new RegExp(path.basename(output)), '')}`
+            );
 
-        // Output path is FILE (aka we are requesting a custom filename for export)
-        if (!isFolder){
-          // Getting parent folder of output file path
-          const _output = path.resolve(__dirname, `${output.replace(new RegExp(path.basename(output)), '')}`);
-            
-          // If parent folder does not exist lets make it
-          if (!fs.existsSync(_output)) {
-            fs.mkdirSync(_output,  { recursive: true });
+            // If parent folder does not exist lets make it
+            if (!fs.existsSync(_output)) {
+              fs.mkdirSync(_output,  { recursive: true });
+            }
+
+            // Requested path + input JSX file extension (input JSX file extension used as placeholder)
+            output = path.resolve(__dirname, `${output}${path.extname(i)}`);
+            output = output.replace(new RegExp(path.basename(output)), path.basename(output).toLowerCase());
           }
 
-          // Requested path + input JSX file extension (input JSX file extension used as placeholder)
-          output = path.resolve(__dirname, `${output}${path.extname(i)}`);
-          output = output.replace(new RegExp(path.basename(output)), path.basename(output).toLowerCase());
+
+
+          // Pass file information to write (note that output replaces .extension with requested .extension).
+          this.write({
+            source,
+            comment,
+            index,
+            name: path.basename(output).toLowerCase(),
+            path: output.replace(new RegExp(`\\${path.extname(output)}`, 'g'), extension)
+          });
         }
+      } else {
+        let isFolder = false;
+        Object.keys(output).map((j) => {
+          if (!path.extname(output[j]) && output[j].charAt(output[j].length-1) === '/') {
+            isFolder = true;
+          }
+        });
 
-        // Pass file information to write (note that output replaces .extension with requested .extension).
-        this.write({
-          source, 
-          comment,
-          index,
-          name: path.basename(output).toLowerCase(), 
-          path: output.replace(new RegExp(`\\${path.extname(output)}`, 'g'), extension)
+        Object.keys(source).map((j) => {
+          // If the file has source only
+          if (source[j]) {
+            // Output path is FOLDER (aka we want to reuse input filename for export)
+            if (isFolder) {
+              // If folder does not exist lets make it
+              if (!fs.existsSync(path.resolve(__dirname, `${output[j]}`))) {
+                fs.mkdirSync(path.resolve(__dirname, `${output[j]}`),  { recursive: true });
+              }
+
+              // Requested path + input JSX filename + input JSX file extension
+              output[j] = path.resolve(__dirname, `${output[j]}/${path.basename(i).toLowerCase()}`);
+            }
+
+            // Output path is FILE (aka we are requesting a custom filename for export)
+            if (!isFolder){
+              // Getting parent folder of output file path
+              const _output = path.resolve(
+                __dirname,
+                `${output[j].replace(new RegExp(path.basename(output[j])), '')}`
+              );
+
+              // If parent folder does not exist lets make it
+              if (!fs.existsSync(_output)) {
+                fs.mkdirSync(_output,  { recursive: true });
+              }
+
+              // Requested path + input JSX file extension (input JSX file extension used as placeholder)
+              output[j] = path.resolve(__dirname, `${output[j]}${path.extname(i)}`);
+              output[j] = output[j].replace(new RegExp(path.basename(output[j])), path.basename(output[j]).toLowerCase());
+            }
+
+            // Pass file information to write (note that output replaces .extension with requested .extension).
+            this.write({
+              source: source[j],
+              comment: comment[j],
+              j,
+              name: path.basename(output[j]).toLowerCase(),
+              path: output[j].replace(new RegExp(`\\${path.extname(output[j])}`, 'g'), extension)
+            });
+          }
         });
       }
     });

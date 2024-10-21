@@ -149,6 +149,7 @@ new WebpackJSXExport({
 ```
 Please note you must return `file` to send changes off to export process.
 
+
 ## options.files.filter
 
 Lastly `files` options offers a `filter` method that allows you to filter away .JSX files you wish NOT to be exported under a glob input scenario:
@@ -189,6 +190,31 @@ new WebpackJSXExport({
   }]
 })
 ```
+
+The filtering option is also a way to tap into the build stream and export multiple parts / instances of a single file by returning file.output, file.comments and file.source as arrays:
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location/custom-name',
+    filter: (file) => {
+      if (file.name.indexOf('special-file')) {
+        file.source = [ { default: [ file.source.somethign ] }, { default: [ file.source.other ]} ];
+        file.output = [ `${file.output}/some/place.html`, `${file.output}/another/place.html`];
+        file.comments = [ 'My /some/place.html comment', ' My /another/place.html comment' ];
+      }
+
+      return file;
+    }
+  }]
+})
+```
+
+This will take your `file`'s arrays, as instructins to the plugin to write multiple exports to disk from a single JSX file. 
+
+Please note, its assumed that the index of say file.source is equal to the index of of file.output and or file.comments. Meaning, `file.source[0]`'s output / comment arrays are also `file.output[0]` and `file.comment[1]`, sharing the same index.
+
 
 ## options.template
 
