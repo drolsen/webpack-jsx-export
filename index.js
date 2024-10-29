@@ -113,7 +113,7 @@ class WebpackJSXExport {
         : this.defaultComment;
 
       // Glob gather (reguardless if its a direct path to JSX file)
-      glob.sync(input).forEach((file) => {
+      glob.sync(input.replaceAll(path.sep, path.posix.sep)).forEach((file) => {
         // Only .jsx files please
         if (path.basename(file).indexOf('.jsx') !== -1) {
           // Build up our file information object for export processing

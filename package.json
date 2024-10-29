@@ -11,7 +11,7 @@
     "webpack jsx static export",
     "webpack jsx static render export"
   ],
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Plugin to allow for the static rendering and exporting of JSX files to disk",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
