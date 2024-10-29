@@ -3,7 +3,7 @@ const razor = require('../../plugins/razor.plugin.js');
 const path = require('path');
 
 const config = {
-  entry: path.resolve(__dirname, '../dummy-entry.js'),
+  entry: './test/dummy-entry.js',
   output: {
     path: path.resolve(__dirname, '../../dist'), 
     filename: '[name].js'

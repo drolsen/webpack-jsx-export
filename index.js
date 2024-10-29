@@ -77,13 +77,13 @@ class WebpackJSXExport {
         'babel-plugin-file-loader',                           // (see: https://www.npmjs.com/package/babel-plugin-file-loader)
         'babel-plugin-transform-require-context',             // (see: https://www.npmjs.com/package/babel-plugin-transform-require-context)
         '@babel/plugin-transform-react-jsx',                  // (see: https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
-        '@babel/plugin-proposal-object-rest-spread',          // (see: https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
-        '@babel/plugin-proposal-class-properties',            // (see: https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)
+        '@babel/plugin-transform-object-rest-spread',          // (see: https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
+        '@babel/plugin-transform-class-properties',            // (see: https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)
         '@babel/plugin-transform-react-display-name',         // (see: https://www.npmjs.com/package/babel-plugin-add-react-displayname)
-        '@babel/plugin-proposal-nullish-coalescing-operator', // (see: https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator)
-        '@babel/plugin-proposal-async-generator-functions',   // (see: https://babeljs.io/docs/en/babel-plugin-proposal-async-generator-functions)
+        '@babel/plugin-transform-nullish-coalescing-operator', // (see: https://babeljs.io/docs/en/babel-plugin-transform-nullish-coalescing-operator)
+        '@babel/plugin-transform-async-generator-functions',   // (see: https://babeljs.io/docs/en/babel-plugin-transform-async-generator-functions)
         '@babel/plugin-transform-for-of',                     // (see: https://babeljs.io/docs/en/babel-plugin-transform-for-of)
-        '@babel/plugin-proposal-optional-chaining',           // (see: https://babeljs.io/docs/en/babel-plugin-proposal-optional-chaining)
+        '@babel/plugin-transform-optional-chaining',           // (see: https://babeljs.io/docs/en/babel-plugin-transform-optional-chaining)
         '@babel/plugin-transform-reserved-words'              // (see: https://babeljs.io/docs/en/babel-plugin-transform-reserved-words)
       ]
     });
@@ -113,16 +113,16 @@ class WebpackJSXExport {
         : this.defaultComment;
 
       // Glob gather (reguardless if its a direct path to JSX file)
-      glob.sync(path.resolve(__dirname, input)).forEach((file) => {
+      glob.sync(input).forEach((file) => {
         // Only .jsx files please
         if (path.basename(file).indexOf('.jsx') !== -1) {
           // Build up our file information object for export processing
           let fileInfo = {
             comment,
             extension,
-            name: path.basename(file),
+            name: path.basename(path.resolve(__dirname, file)),
             output,
-            source: require(file)
+            source: require(path.resolve(__dirname, file))
           };
 
           // Scrub our file information against filtering
@@ -174,7 +174,6 @@ class WebpackJSXExport {
       let { output } = collection[i];
       const { comment } = collection[i];
       const { extension } = collection[i];
-
       if (!Array.isArray(output)) {
         const isFolder = !path.extname(output) && output.charAt(output.length-1) === '/';
         // If the file has source only
