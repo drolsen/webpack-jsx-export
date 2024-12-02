@@ -91,7 +91,10 @@ class WebpackJSXExport {
     // Now that our babel is registered, we can hoist up globals
     if (this.options.globals) {
       Object.keys(this.options.globals).map((i) => {
-        global[i] = require(this.options.globals[i]);
+        // Some globals are not trying to be required files, but are variables for string data
+        if (typeof this.options.globals[i] === 'string') {
+          global[i] = require(this.options.globals[i]);
+        }
       });
     }
   }
