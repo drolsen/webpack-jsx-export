@@ -189,7 +189,7 @@ class WebpackJSXExport {
             }
 
             // Requested path + input JSX filename + input JSX file extension
-            output = path.resolve(__dirname, `${output}/${path.basename(i).toLowerCase()}`);
+            output = path.resolve(__dirname, `${output}/${path.basename(i)}`);
           }
 
           // Output path is FILE (aka we are requesting a custom filename for export)
@@ -207,7 +207,7 @@ class WebpackJSXExport {
 
             // Requested path + input JSX file extension (input JSX file extension used as placeholder)
             output = path.resolve(__dirname, `${output}${path.extname(i)}`);
-            output = output.replace(new RegExp(path.basename(output)), path.basename(output).toLowerCase());
+            output = output.replace(new RegExp(path.basename(output)), path.basename(output));
           }
 
 
@@ -217,7 +217,7 @@ class WebpackJSXExport {
             source,
             comment,
             index,
-            name: path.basename(output).toLowerCase(),
+            name: path.basename(output),
             path: output.replace(new RegExp(`\\${path.extname(output)}`, 'g'), extension)
           });
         }
@@ -240,7 +240,7 @@ class WebpackJSXExport {
               }
 
               // Requested path + input JSX filename + input JSX file extension
-              output[j] = path.resolve(__dirname, `${output[j]}/${path.basename(i).toLowerCase()}`);
+              output[j] = path.resolve(__dirname, `${output[j]}/${path.basename(i)}`);
             }
 
             // Output path is FILE (aka we are requesting a custom filename for export)
@@ -258,7 +258,7 @@ class WebpackJSXExport {
 
               // Requested path + input JSX file extension (input JSX file extension used as placeholder)
               output[j] = path.resolve(__dirname, `${output[j]}${path.extname(i)}`);
-              output[j] = output[j].replace(new RegExp(path.basename(output[j])), path.basename(output[j]).toLowerCase());
+              output[j] = output[j].replace(new RegExp(path.basename(output[j])), path.basename(output[j]));
             }
 
             // Pass file information to write (note that output replaces .extension with requested .extension).
@@ -266,7 +266,7 @@ class WebpackJSXExport {
               source: source[j],
               comment: comment[j],
               j,
-              name: path.basename(output[j]).toLowerCase(),
+              name: path.basename(output[j]),
               path: output[j].replace(new RegExp(`\\${path.extname(output[j])}`, 'g'), extension)
             });
           }

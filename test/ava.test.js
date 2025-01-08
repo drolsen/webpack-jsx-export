@@ -12,6 +12,16 @@ test('basic-test', t => {
   }
 });
 
+test('camelcase-test', t => {
+  const pass = fs.existsSync(path.resolve(__dirname, './../dist/camelCase.html'));  
+
+  if (pass) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
+
 test('conditions-test', t => {
   let pass = fs.readFileSync(path.resolve(__dirname, './../dist/conditions.html'), 'utf8');  
 

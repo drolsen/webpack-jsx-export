@@ -11,7 +11,7 @@
     "webpack jsx static export",
     "webpack jsx static render export"
   ],
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Plugin to allow for the static rendering and exporting of JSX files to disk",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
@@ -20,8 +20,9 @@
   "author": "Devin R. Olsen <devin@devinrolsen.com> (http://devinrolsen.com)",
   "license": "MIT",
   "scripts": {
-    "test": "npm run basic-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run plugin-test && npm run glob-test && npm run filter-test && npm run node-test && npm run comment-test && npm run warning-test && npm run ava-test",
+    "test": "npm run basic-test && npm run camelcase-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run plugin-test && npm run glob-test && npm run filter-test && npm run node-test && npm run comment-test && npm run warning-test && npm run ava-test",
     "basic-test": "webpack --config ./test/basic/basic.test.config.js --mode production",
+    "camelcase-test": "webpack --config ./test/camelcase/camelCase.test.config.js --mode production",
     "custom-test": "webpack --config ./test/custom/custom.test.config.js --mode production",
     "comment-test": "webpack --config ./test/comments/comment-custom.test.config.js --mode production && webpack --config ./test/comments/comment-false.test.config.js --mode production && webpack --config ./test/comments/comment-filter.test.config.js --mode production",
     "extension-test": "webpack --config ./test/extensions/extension.test.config.js --mode production",
