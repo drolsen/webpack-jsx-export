@@ -448,86 +448,6 @@ new WebpackJSXExport({
 
 By default the `warnings` option is `true` with the idea being its better hoist "need to fix issue" up higher and sooner for developers to see, rather than out in production in browser console.
 
-
-### NodeJS Script Usage
-
-While its recommended that you use WebpackJSXExport in a actual webpack build configuration, it can also be ran from a node script due to how babel plugins are registered prior to rendering.
-
-Here is a basic node script that uses WebpackJSXExport:
-
-```js
-const WebpackJSXExport = require('webpack-jsx-export');
-
-const exporter = new WebpackJSXExport({
-  files: [{
-    input: './input/location/*.jsx',
-    output: './export/location/'
-  }]
-});
-
-exporter.run();
-```
-
-Note we have a `.run()` method to actual perform the exporting. This gives finer control between when instantiating a exporter, its configuration and when the exporting runs.
-
-
----
-
-### Babel Transpile Plugins
-
-Webpack JSX Export uses babel plugin register approach to transpile JSX source (and syntax sugar) into markup across both Webpack builds, or NodeJS scripts. The baseline babel transpile plugins used by WebpackJSXExport are the following:
-
-Plugin | Description | URL
---- | --- | --- 
-`babel-plugin-file-loader` | File loader | [Plugin Details](https://www.npmjs.com/package/babel-plugin-file-loader)
-`babel-plugin-transform-require-context` | Require importing | [Plugin Details](https://www.npmjs.com/package/babel-plugin-transform-require-context) 
-`@babel/plugin-transform-react-jsx` | JSX Transpile | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
-`@babel/plugin-proposal-object-rest-spread` | Object Spread | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
-`@babel/plugin-proposal-class-properties` | JS Classes | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)
-`@babel/plugin-transform-react-display-name` | React Helper | [Plugin Details](https://www.npmjs.com/package/babel-plugin-add-react-displayname)
-`@babel/plugin-proposal-nullish-coalescing-operator` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator)
-`@babel/plugin-proposal-async-generator-functions` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-async-generator-functions)
-`@babel/plugin-transform-for-of` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-for-of)
-`@babel/plugin-proposal-optional-chaining` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-optional-chaining)
-`@babel/plugin-transform-reserved-words` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-reserved-words)
-
-
-### Babel Alias and Global Namespaces
-Webpack JSX Export while run under a Webpack configuration will automatically carry over any alias pathing you may have configured for you build. You wont need to maintain this yourself in the plugins option.
-
-```js
-require.resolve('babel-plugin-module-resolver'), {  // (see: https://www.npmjs.com/package/babel-plugin-module-resolver)
-  'alias': (compiler) ? compiler.options.resovle : {}
-}
-```
-
-Furthermore two very common global namespaces for `React` and `PropType` have been setup for you, so again you don't need to maintain these in the plugin's options.
-```js
-require.resolve('babel-plugin-import-globals'), {   // (see: https://www.npmjs.com/package/babel-plugin-import-globals)
-  "React": "react",
-  "PropTypes": 'prop-types'
-}
-```
-
-While both of the above come out of the box, take note on how they are being used as you can pass your own versions through the plugin's options if you say, want to add more required global namespaces or context resolver(s).
-
----
-
-### &lt;export&gt; & &lt;no-export&gt; tag support
-
-Webpack JSX Export plugin also comes with two built-in tags for giving you finer control over corner cases where a particular part of code should be there in say a Webpack Dev instance, but not there during final production export.
-
-
-```jsx
-<export>
-    Anything in me will be written unwrapped from the &lt;export&gt; tag and written to disk.
-</export>
-
-<no-export>
-    Anything in me is removed from the export and will not be written to disk.
-</no-export>
-```
-
 ---
 
 ## options.assets
@@ -681,6 +601,86 @@ becomes:
 ```
 
 By default this is `["png", "jpg", "jpeg", "gif", "svg"]` but if you need to expand on this list, here is where you would do so.
+
+
+### NodeJS Script Usage
+
+While its recommended that you use WebpackJSXExport in a actual webpack build configuration, it can also be ran from a node script due to how babel plugins are registered prior to rendering.
+
+Here is a basic node script that uses WebpackJSXExport:
+
+```js
+const WebpackJSXExport = require('webpack-jsx-export');
+
+const exporter = new WebpackJSXExport({
+  files: [{
+    input: './input/location/*.jsx',
+    output: './export/location/'
+  }]
+});
+
+exporter.run();
+```
+
+Note we have a `.run()` method to actual perform the exporting. This gives finer control between when instantiating a exporter, its configuration and when the exporting runs.
+
+
+---
+
+### Babel Transpile Plugins
+
+Webpack JSX Export uses babel plugin register approach to transpile JSX source (and syntax sugar) into markup across both Webpack builds, or NodeJS scripts. The baseline babel transpile plugins used by WebpackJSXExport are the following:
+
+Plugin | Description | URL
+--- | --- | --- 
+`babel-plugin-file-loader` | File loader | [Plugin Details](https://www.npmjs.com/package/babel-plugin-file-loader)
+`babel-plugin-transform-require-context` | Require importing | [Plugin Details](https://www.npmjs.com/package/babel-plugin-transform-require-context) 
+`@babel/plugin-transform-react-jsx` | JSX Transpile | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
+`@babel/plugin-proposal-object-rest-spread` | Object Spread | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
+`@babel/plugin-proposal-class-properties` | JS Classes | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)
+`@babel/plugin-transform-react-display-name` | React Helper | [Plugin Details](https://www.npmjs.com/package/babel-plugin-add-react-displayname)
+`@babel/plugin-proposal-nullish-coalescing-operator` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-nullish-coalescing-operator)
+`@babel/plugin-proposal-async-generator-functions` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-async-generator-functions)
+`@babel/plugin-transform-for-of` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-for-of)
+`@babel/plugin-proposal-optional-chaining` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-proposal-optional-chaining)
+`@babel/plugin-transform-reserved-words` | JS Syntax Feature | [Plugin Details](https://babeljs.io/docs/en/babel-plugin-transform-reserved-words)
+
+
+### Babel Alias and Global Namespaces
+Webpack JSX Export while run under a Webpack configuration will automatically carry over any alias pathing you may have configured for you build. You wont need to maintain this yourself in the plugins option.
+
+```js
+require.resolve('babel-plugin-module-resolver'), {  // (see: https://www.npmjs.com/package/babel-plugin-module-resolver)
+  'alias': (compiler) ? compiler.options.resovle : {}
+}
+```
+
+Furthermore two very common global namespaces for `React` and `PropType` have been setup for you, so again you don't need to maintain these in the plugin's options.
+```js
+require.resolve('babel-plugin-import-globals'), {   // (see: https://www.npmjs.com/package/babel-plugin-import-globals)
+  "React": "react",
+  "PropTypes": 'prop-types'
+}
+```
+
+While both of the above come out of the box, take note on how they are being used as you can pass your own versions through the plugin's options if you say, want to add more required global namespaces or context resolver(s).
+
+---
+
+### &lt;export&gt; & &lt;no-export&gt; tag support
+
+Webpack JSX Export plugin also comes with two built-in tags for giving you finer control over corner cases where a particular part of code should be there in say a Webpack Dev instance, but not there during final production export.
+
+
+```jsx
+<export>
+    Anything in me will be written unwrapped from the &lt;export&gt; tag and written to disk.
+</export>
+
+<no-export>
+    Anything in me is removed from the export and will not be written to disk.
+</no-export>
+```
 
 ---
 
