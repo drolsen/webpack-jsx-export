@@ -75,21 +75,6 @@ Option | Types | Description | Default
 `assets.name` | String | Defines the filename pattern that imported assets will be renamed | [hash].[ext]
 `assets.extensions` | Array | Defines a list of allowed extensions that will be processed | ["png", "jpg", "jpeg", "gif", "svg"]
 
-
-      assets: {
-        extensions: ["png", "jpg", "jpeg", "gif", "svg"],
-        public: '/public',
-        output: '/public',
-        name: '[hash].[ext]'
-      },
-
-      assets: {
-        extensions: ["png", "jpg", "jpeg", "gif", "svg"],
-        public: '/public',
-        output: '/public',
-        name: '[hash].[ext]'
-      },
-
 ## options.files
 With the `files` option, you must specify both `input` and `output` for source JSX files and location of where exports will be written:
 
