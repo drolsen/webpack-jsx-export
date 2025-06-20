@@ -69,7 +69,26 @@ Option | Types | Description | Default
 `plugins` | Object | Defines custom plugins used during the processing of each exported JSX file | {}
 `comment` | String, Boolean or Function | Defines a custom comment prepended to the top of exported files | --
 `warnings` | Boolean | Defines if JSX prop warnings should be shown in terminal or not | true
+`assets` | Object | Configuration for imported assets within exported JSX. (See asset options below) | --
+`assets.public` | String | Defines that path that imported assets will be converted to at export. | /public
+`assets.output` | String | Defines the output location that imported assets will be written to at export | /public
+`assets.name` | String | Defines the filename pattern that imported assets will be renamed | [hash].[ext]
+`assets.extensions` | Array | Defines a list of allowed extensions that will be processed | ["png", "jpg", "jpeg", "gif", "svg"]
 
+
+      assets: {
+        extensions: ["png", "jpg", "jpeg", "gif", "svg"],
+        public: '/public',
+        output: '/public',
+        name: '[hash].[ext]'
+      },
+
+      assets: {
+        extensions: ["png", "jpg", "jpeg", "gif", "svg"],
+        public: '/public',
+        output: '/public',
+        name: '[hash].[ext]'
+      },
 
 ## options.files
 With the `files` option, you must specify both `input` and `output` for source JSX files and location of where exports will be written:
@@ -526,6 +545,159 @@ Webpack JSX Export plugin also comes with two built-in tags for giving you finer
 
 ---
 
+## options.assets
+
+Imported assets (jpg, svg, png) files in your JSX will be converted to a pathing of `/public/[hash].[ext]` unless configured otherwise. 
+
+This is the default behavior of the babel-plugin-file-loader (https://www.npmjs.com/package/babel-plugin-file-loader).
+
+```jsx
+import Container from '../elements/container.jsx';
+import logo from '../../assets/logo.jpg';
+
+<Container>
+  <Container>Hello world!</Container>
+  <img src={logo} alt="this is a logo asset file we have imported as a path" />
+</Container>
+```
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location'
+  }]  
+})
+```
+
+Will result in your import asset pathing converted to a pathing of `/public/[hash].[ext]`
+```html
+
+<div class="container container--style-default false ">
+  <div class="container container--style-default false ">
+    Hello world!
+  </div>
+  <img src="/public/f4076f872a8528ed1edd303d78d7a3fd.jpg" alt="this is a logo asset file we have imported as a path">
+</div>
+```
+
+---
+
+### options.assets.public
+
+This allows you to define what the path will be of your imported assets after being converted.
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location'
+  }],
+  assets: {
+    public: '/my/custom/asset/path/img'
+  } 
+})
+```
+becomes:
+```html
+<div class="container container--style-default false ">
+  <div class="container container--style-default false ">Hello world!</div>
+  <img src="/my/custom/asset/path/img/f4076f872a8528ed1edd303d78d7a3fd.jpg" alt="this is a logo asset file we have imported as a path">
+</div>
+```
+and will be written to a folder of `/public` as `f4076f872a8528ed1edd303d78d7a3fd.jpg`. In this scenario you would be relying on some kind of system level rewrite rule so requests to `/my/custom/asset/path/img/*` resolves to `/public`.
+
+---
+
+### options.assets.ouput
+
+This allows you to define the path of where your imported assets should be written.
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location'
+  }],
+  assets: {
+    public: '/my/custom/asset/path/img',
+    output: '/my/custom/asset/path/img'
+  } 
+})
+```
+
+becomes:
+```html
+<div class="container container--style-default false ">
+  <div class="container container--style-default false ">Hello world!</div>
+  <img src="/my/custom/asset/path/img/f4076f872a8528ed1edd303d78d7a3fd.jpg" alt="this is a logo asset file we have imported as a path">
+</div>
+```
+
+and will be written to a folder of `/my/custom/asset/path/img/` as `f4076f872a8528ed1edd303d78d7a3fd.jpg`. 
+
+---
+
+### options.assets.name
+
+This allows you to define the file's name pattern for your imported assets.
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location'
+  }],
+  assets: {
+    public: '/my/custom/asset/path/img',
+    output: '/my/custom/asset/path/img',
+    name: '[name].[ext]'
+  } 
+})
+```
+
+becomes:
+```html
+<div class="container container--style-default false ">
+  <div class="container container--style-default false ">Hello world!</div>
+  <img src="/my/custom/asset/path/img/logo.jpg" alt="this is a logo asset file we have imported as a path">
+</div>
+```
+
+and will be written to a folder of `/my/custom/asset/path/img/` as `logo.jpg`. 
+
+---
+
+### options.assets.extensions
+
+This allows you to define what file extensions of imported assets will pick up your settings and be pathed accordingly.
+
+```js
+new WebpackJSXExport({
+  files: [{
+    input: './input/location-one/*.jsx',
+    output: './export/location'
+  }],
+  assets: {
+    public: '/my/custom/asset/path/img',
+    output: '/my/custom/asset/path/img',
+    name: '[name].[ext]',
+    extensions: '["png", "jpg", "jpeg", "gif", "svg"]'
+  } 
+})
+```
+
+becomes:
+```html
+<div class="container container--style-default false ">
+  <div class="container container--style-default false ">Hello world!</div>
+  <img src="/my/custom/asset/path/img/logo.jpg" alt="this is a logo asset file we have imported as a path">
+</div>
+```
+
+By default this is `["png", "jpg", "jpeg", "gif", "svg"]` but if you need to expand on this list, here is where you would do so.
+
+---
 
 
 ### Tests
