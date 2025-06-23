@@ -31,6 +31,12 @@ class WebpackJSXExport {
           SymbolsPlugin
         ],
       },
+      assets: {
+        extensions: ["png", "jpg", "jpeg", "gif", "svg"],
+        public: '/public',
+        output: '/public',
+        name: '[hash].[ext]'
+      },
       globals: {},
       templates: (file) => { return file; },
       warnings: true
@@ -74,7 +80,17 @@ class WebpackJSXExport {
           ? (this.options.plugins.input.length)
             ? this.options.plugins.input : {}
           : {},
-        'babel-plugin-file-loader',                           // (see: https://www.npmjs.com/package/babel-plugin-file-loader)
+        [
+          "file-loader",
+          {
+            "name": this.options.assets.name,
+            "extensions": this.options.assets.extensions,
+            "publicPath": this.options.assets.public,
+            "outputPath": this.options.assets.output,
+            "context": "",
+            "limit": 0
+          }
+        ],
         'babel-plugin-transform-require-context',             // (see: https://www.npmjs.com/package/babel-plugin-transform-require-context)
         '@babel/plugin-transform-react-jsx',                  // (see: https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
         '@babel/plugin-transform-object-rest-spread',          // (see: https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)

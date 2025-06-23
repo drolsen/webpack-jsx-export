@@ -11,7 +11,7 @@
     "webpack jsx static export",
     "webpack jsx static render export"
   ],
-  "version": "1.4.3",
+  "version": "1.4.6",
   "description": "Plugin to allow for the static rendering and exporting of JSX files to disk",
   "repository": "drolsen/webpack-jsx-export",
   "bugs": {
@@ -20,7 +20,7 @@
   "author": "Devin R. Olsen <devin@devinrolsen.com> (http://devinrolsen.com)",
   "license": "MIT",
   "scripts": {
-    "test": "npm run basic-test && npm run camelcase-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run plugin-test && npm run glob-test && npm run filter-test && npm run node-test && npm run comment-test && npm run warning-test && npm run ava-test",
+    "test": "npm run basic-test && npm run camelcase-test && npm run conditions-test && npm run extension-test && npm run custom-test && npm run plugin-test && npm run glob-test && npm run filter-test && npm run node-test && npm run comment-test && npm run warning-test && npm run assets-test && npm run ava-test",
     "basic-test": "webpack --config ./test/basic/basic.test.config.js --mode production",
     "camelcase-test": "webpack --config ./test/camelcase/camelCase.test.config.js --mode production",
     "custom-test": "webpack --config ./test/custom/custom.test.config.js --mode production",
@@ -32,6 +32,7 @@
     "glob-test": "webpack --config ./test/glob/glob.test.config.js --mode production",
     "node-test": "node ./test/node/node.test.js",
     "warning-test": "webpack --config ./test/warnings/warning.test.config.js --mode production",
+    "assets-test": "webpack --config ./test/assets/assets.test.config.js --mode production",
     "ava-test": "ava ./test/ava.test.js"
   },
   "engines": {

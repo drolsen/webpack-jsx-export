@@ -220,3 +220,28 @@ test('warnings-test', t => {
     t.fail();
   }
 });
+
+
+test('assets-test', t => {
+  let passA = fs.readFileSync(path.resolve(__dirname, './../dist/assets-a.html'), 'utf8');  
+
+  if (
+    passA.toString().indexOf('/public') !== -1
+  ) {
+    passA = false;
+  }
+
+  let passB = fs.readFileSync(path.resolve(__dirname, './../dist/assets-b.html'), 'utf8');  
+
+  if (
+    passB.toString().indexOf('/public') === -1
+  ) {
+    passB = false;
+  }
+
+  if (passA && passB) {
+    t.pass();
+  } else {
+    t.fail();
+  }
+});
